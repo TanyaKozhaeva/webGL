@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>WEB GL</title>
+</head>
+
+<body>
+
+<canvas style="width:100%; height: 100vh" id="canvas"></canvas>
+<div style="position: fixed; top: 0; right: 0" id="uiContainer">
+  <div id="ui">
+    <div id="x"></div>
+    <div id="y"></div>
+    <div id="angle"></div>
+  </div>
+</div>
+
+
+<script id="2d-vertex-shader" type="x-shader/x-vertex">
+attribute vec2 a_position;
+
+uniform mat3 u_matrix;
+
+attribute vec2 a_texCoord;
+varying vec2 v_texCoord;
+
+void main() {
+  // Multiply the position by the matrix.
+  gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
+
+  v_texCoord = a_texCoord;
+}
+</script>
+<!-- fragment shader -->
+
+
+<script id="2d-fragment-shader" type="notjs">
+ 
+  // фрагментные шейдеры не имеют точности по умолчанию, поэтому нам необходимо её
+  // указать. mediump подойдёт для большинства случаев. Он означает "средняя точность"
+  precision mediump float;
+  uniform vec4 u_color;
+  uniform sampler2D u_image;
+  varying vec2 v_texCoord;
+  void main() {
+    // gl_FragColor - специальная переменная фрагментного шейдера.
+    // Она отвечает за установку цвета.
+     gl_FragColor = texture2D(u_image, v_texCoord);
+  }
+ 
+</script>
+<script src="https://webglfundamentals.org/webgl/resources/jquery-1.7.1.min.js"></script>
+<script src="https://webglfundamentals.org/webgl/resources/jquery-ui-1.8.16.custom.min.js"></script>
+<script src="https://webglfundamentals.org/webgl/resources/jquery.mousecapture.js"></script>
+<script src="https://webglfundamentals.org/webgl/resources/jquery.gman.ui.js"></script>
+<script src="https://webglfundamentals.org/webgl/resources/jquery-gman-circle.js"></script>
+
+<script src="https://webglfundamentals.org/webgl/resources/webgl-utils.js"></script>
+<script src="https://webglfundamentals.org/webgl/resources/webgl-lessons-ui.js"></script>
+
+<script src="game.js"></script>
+</body>
+</html>
